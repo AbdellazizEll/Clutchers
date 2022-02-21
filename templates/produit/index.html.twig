@@ -1,0 +1,81 @@
+{% extends 'indexback.html.twig' %}
+{% block body %}
+<body class="g-sidenav-show  bg-gray-200">
+<a href="{{ path('produit_add') }}" class="btn btn-primary">Ajouter Produit</a>
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3">Produit</h6>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id_p</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">image</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Prix</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">description</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantite</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Categorie</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Delete</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Update</th>
+
+
+                      <th class="text-secondary opacity-7"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for e in data %}
+                  <tr>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold mb-0">{{ e.id }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold mb-0">{{ e.image }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold mb-0">{{ e.prix }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold mb-0">{{ e.nom}}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold mb-0">{{ e.description }}</span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold mb-0">{{ e.qte }}</span>
+                    </td>
+
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold mb-0">{{ e.cat.nomC }}</span>
+                    </td>
+                    <td class="align-middle">
+                      <a href="{{ path('produit_d' , {'id': e.id} ) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                        Delete
+                      </a>
+                    </td>
+                    <td class="align-middle">
+                      <a href="{{ path('produit_u' , {'id': e.id} ) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                        Update
+                      </a>
+                    </td>
+
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+      
+</body>
+{% endblock %}
