@@ -22,7 +22,7 @@ class Categories
 
     /**
      * @ORM\Column(type="string", length=255)
-     *@Assert\NotBlank(message="the name of category is required")
+     * @Assert\NotBlank(message="the name of category is required")
      */
     private $nomC;
 
@@ -77,5 +77,13 @@ class Categories
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Produit[]
+     */
+    public function getListProduit(): Collection
+    {
+        return $this->ListProduit;
     }
 }

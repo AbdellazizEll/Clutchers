@@ -17,11 +17,13 @@ class ProduitType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('image',FileType::class,array('data_class'=> null, 'label' => 'Image'))
-            ->add('prix', TextType::class)
+            ->add('image', FileType::class,[
+                'mapped' => false
+            ])
+            ->add('prix')
             ->add('nom', TextType::class)
             ->add('description', TextType::class)
-            ->add('qte', TextType::class)
+            ->add('qte')
             ->add('cat' , EntityType::class,['class' => Categories::class , 'choice_label' => 'nomC', 'expanded'=> false , 'multiple' => false]);
     }
 

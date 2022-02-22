@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Categories;
 use App\Form\CategorieType;
+use App\Form\ProduitType;
 use App\Repository\CategoriesRepository;
+use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +52,29 @@ class CategorieController extends AbstractController
         ]);
     }
 
+    /**
+     * @param $id
+     * @param CategoriesRepository $rep
+     * @param Request $req
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @Route ("/cat_update_{id}" , name="cat_update")
+     */
+    public function update($id, CategoriesRepository $rep , Request $req){
+        $cat = $rep->find($id);
+        $form=$this ->createForm(CategorieType::class,$cat);
+        //$form->add('Modifier', SubmitType::class);
+        $form->handleRequest($req);
+        if($form->isSubmitted() && $form->isValid())
+        {$em=$this->getDoctrine()->getManager();
+            $em->flush();
+            return $this->redirectToRoute('categorie');
+
+        }
+
+        return $this->render('categorie/update.html.twig', [
+            'fadd'=>$form->createView(),
+        ]);
+    }
     /**
      * @param $id
      * @param CategoriesRepository $rep

@@ -23,7 +23,8 @@
                             <tr>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Action</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Delete</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Update</th>
 
                                 <th class="text-secondary opacity-7"></th>
                             </tr>
@@ -45,6 +46,11 @@
                                     <td class="align-middle">
                                         <a href="{{ path('categorie_del' , {'id': e.id} ) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                             Delete
+                                        </a>
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="{{ path('cat_update' , {'id': e.id} ) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                            Update
                                         </a>
                                     </td>
 

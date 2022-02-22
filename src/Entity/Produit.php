@@ -25,7 +25,7 @@ class Produit
     private $id;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank(message="the name is required")
      */
 
@@ -33,8 +33,6 @@ class Produit
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Upload your image")
-     * @Assert\File(mimeTypes={ "image/png", "image/jpeg" })
      */
     private $image;
 

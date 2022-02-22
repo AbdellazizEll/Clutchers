@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use App\Entity\Urlizer;
 
 
 
@@ -25,36 +29,50 @@ class ProduitController extends AbstractController
         $p = $rep->findAll();
         return $this->render('produit/index.html.twig', [
             'controller_name' => 'ProduitController',
-            'data' => $p
+            'Prod' => $p
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param EntityManager $em
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @Route("/affichage_Prod", name="affichage_Prod")
+     */
+
+    public function affichageProd() {
+        $Prod = $this->getDoctrine()->getManager()->getRepository(Produit::class)->findAll(); // select * from product
+
+
+        return $this->render("produit/index.html.twig",array("Prod"=>$Prod));
+    }
+
+    /**
      * @Route("/produit_add" , name="produit_add")
      */
-    public function create(Request $request , EntityManagerInterface $em){
+    public function create(Request $request){
         $prod = new Produit();
         $form = $this->createForm(ProduitType::class, $prod);
-        //$form->add('Envoyer' , SubmitType::class);
         $form->handleRequest($request);
 
         if($form->isSubmitted()&& $form->isValid()){
-           // $file = $prod->getImage();
-            //$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-           // $file->move($this->getParameter('brochures_directory'), $fileName);
-           // $prod->setImage($fileName);
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form['image']->getData();
+            $destination = $this->getParameter('kernel.project_dir').'/public/uploads';
+            $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $newFilename = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$uploadedFile->guessExtension();
+            $uploadedFile->move(
+                $destination,
+                $newFilename
+            );
+            $prod->setImage($newFilename);
+            $em = $this->getDoctrine()->getManager();
             $em->persist($prod);
             $em->flush();
-            return $this->redirectToRoute('produit');
+            return $this->redirectToRoute('affichage_Prod');
         }
+
 
         return $this->render('produit/add.html.twig' , ['prod' => $prod,'fadd'=>$form->createView()]);
     }
+
 
     /**
      * @return string
@@ -77,10 +95,8 @@ class ProduitController extends AbstractController
     }
 
     /**
-     * @Route("produit_update/{id}", name="produit_u")
-     * @param int $id
-     * @param Request $request
-     * @param ProduitRepository $Rep
+     * @Route("produit_update_{id}", name="produit_u")
+
      * @return Response
      */
     public function update(int $id, Request $request, ProduitRepository $Rep): Response
@@ -88,16 +104,35 @@ class ProduitController extends AbstractController
         $prod = $Rep->find($id);
         $form = $this->createForm(ProduitType::class, $prod);
         $form->handleRequest($request);
-        if (($form->isSubmitted()) && ($form->isValid()))
-        {
-            $manager = $this->getDoctrine()->getManager();
-            $manager->flush();
-            return $this->redirectToRoute('produit');
+        if($form->isSubmitted()&& $form->isValid()){
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form['image']->getData();
+            $destination = $this->getParameter('kernel.project_dir').'/public/uploads';
+            $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+            $newFilename = Urlizer::urlize($originalFilename).'-'.uniqid().'.'.$uploadedFile->guessExtension();
+            $uploadedFile->move(
+                $destination,
+                $newFilename
+            );
+            $prod->setImage($newFilename);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($prod);
+            $em->flush();
+            return $this->redirectToRoute('affichage_Prod');
         }
-        return $this->render('produit/add.html.twig', [
-            'fadd' => $form->createView(),
-        ]);
+
+
+        return $this->render('produit/update.html.twig' , ['prod' => $prod,'fadd'=>$form->createView()]);
     }
 
+    /**
+     * @param ProduitRepository $rep
+     * @return Response
+     * @Route ("/shop", name="shop")
+     */
+    public function Display(ProduitRepository $rep){
+        $prod = $rep->findAll();
+        return $this->render('shop.html.twig', ['prod'=>$prod ]);
+    }
 
 }
